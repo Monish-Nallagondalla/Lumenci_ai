@@ -1,0 +1,6 @@
+Router Product Specification
+
+The router contains a packet-processing engine that examines headers and forwards packets across network interfaces.
+The device uses integrated 2.4 GHz and 5 GHz radio hardware for wireless communication.
+Quality-of-service logic classifies packets by traffic category and prioritizes latency-sensitive flows such as voice and video.
+The administration manual explains how users configure traffic priority rules from the web dashboard.

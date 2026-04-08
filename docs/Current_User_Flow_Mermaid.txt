@@ -1,0 +1,29 @@
+flowchart TD
+    A[Analyst opens Lumenci workspace] --> B{Start mode}
+    B -->|Load sample| C[Load sample claim chart and support material]
+    B -->|Upload files| D[Upload claim chart CSV and supporting docs]
+    C --> E[Parse chart into structured 3-column workspace]
+    D --> E
+    E --> F[Flag weak evidence and vague reasoning]
+    F --> G[Analyst selects a claim row]
+    G --> H[Analyst asks for refinement through chat or quick actions]
+    H --> I[Retrieve relevant support snippets]
+    I --> J{Enough evidence found?}
+    J -->|No| K[AI asks for more support]
+    K --> L[Analyst appends docs or ingests URL]
+    L --> I
+    J -->|Yes| M[AI returns evidence/reasoning suggestion]
+    M --> N[Review drawer shows citations, diff, scrutiny, and challenge prompts]
+    N --> O{Analyst decision}
+    O -->|Accept| P[Update chart row]
+    P --> Q[Log version event and refresh workspace progress]
+    Q --> R{Continue refining?}
+    R -->|Yes| G
+    R -->|No| S[Export DOCX or CSV outputs]
+    O -->|Modify via chat| T[Analyst sends follow-up instruction]
+    T --> I
+    O -->|Reject| U[Keep current row state and log rejection]
+    U --> G
+    V[Edge case: AI gives wrong evidence] --> N
+    W[Edge case: Undo a previous accepted refinement] --> X[Use version timeline or undo action]
+    X --> G

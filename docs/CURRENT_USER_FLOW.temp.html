@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Lumenci Current User Flow</title>
+  <style>
+    body {
+      font-family: Calibri, Arial, sans-serif;
+      color: #1f2937;
+      margin: 42px;
+      line-height: 1.45;
+      font-size: 11pt;
+    }
+    h1 {
+      font-size: 22pt;
+      color: #111827;
+      margin: 0 0 6px 0;
+    }
+    h2 {
+      font-size: 15pt;
+      color: #111827;
+      margin: 24px 0 8px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    h3 {
+      font-size: 12pt;
+      color: #111827;
+      margin: 18px 0 6px 0;
+    }
+    p {
+      margin: 0 0 10px 0;
+    }
+    ul, ol {
+      margin: 8px 0 12px 22px;
+    }
+    li {
+      margin: 0 0 6px 0;
+    }
+    .eyebrow {
+      color: #ea580c;
+      font-size: 10pt;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #475569;
+      font-size: 11pt;
+      margin-bottom: 14px;
+    }
+    .callout {
+      border: 1px solid #fed7aa;
+      background: #fff7ed;
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 16px 0 20px 0;
+    }
+    .callout strong {
+      color: #9a3412;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px 0;
+      font-size: 10.5pt;
+    }
+    th {
+      background: #eff6ff;
+      color: #1e3a8a;
+      text-align: left;
+      font-weight: 700;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+    }
+    td {
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+    }
+    .pill-row {
+      margin: 12px 0 12px 0;
+    }
+    .pill {
+      display: inline-block;
+      margin: 0 8px 8px 0;
+      padding: 5px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 999px;
+      background: #f8fafc;
+      font-size: 9.5pt;
+    }
+    .grid-note {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 12px 14px;
+      margin: 10px 0 16px 0;
+    }
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9pt;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid #1e293b;
+    }
+    .footer-note {
+      color: #64748b;
+      font-size: 9.5pt;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+<body>
+<div class="eyebrow">Lumenci Assignment | Current Flow</div>
+<h1>Present User Flow Mermaid Code</h1>
+<p class="subtitle">Copy-ready document for Google Docs, recruiter notes, or a Mermaid renderer.</p>
+
+<div class="callout">
+  <strong>How to use this:</strong> Paste the code block into Mermaid Live Editor or keep it in your recruiter materials as the final flow that reflects the polished prototype.
+</div>
+
+<h2>Flow Summary</h2>
+<ul>
+  <li>The analyst can start with a sample workspace or upload a claim chart and supporting files.</li>
+  <li>The workflow focuses on row-level refinement instead of generic chat-only interaction.</li>
+  <li>When evidence is weak, the model asks for more support instead of pretending certainty.</li>
+  <li>The review drawer supports accept, reject, modify, versioning, and undo before export.</li>
+</ul>
+
+<h2>Mermaid Code</h2>
+<pre>`mermaid
+flowchart TD
+    A[Analyst opens Lumenci workspace] --> B{Start mode}
+    B -->|Load sample| C[Load sample claim chart and support material]
+    B -->|Upload files| D[Upload claim chart CSV and supporting docs]
+    C --> E[Parse chart into structured 3-column workspace]
+    D --> E
+    E --> F[Flag weak evidence and vague reasoning]
+    F --> G[Analyst selects a claim row]
+    G --> H[Analyst asks for refinement through chat or quick actions]
+    H --> I[Retrieve relevant support snippets]
+    I --> J{Enough evidence found?}
+    J -->|No| K[AI asks for more support]
+    K --> L[Analyst appends docs or ingests URL]
+    L --> I
+    J -->|Yes| M[AI returns evidence/reasoning suggestion]
+    M --> N[Review drawer shows citations, diff, scrutiny, and challenge prompts]
+    N --> O{Analyst decision}
+    O -->|Accept| P[Update chart row]
+    P --> Q[Log version event and refresh workspace progress]
+    Q --> R{Continue refining?}
+    R -->|Yes| G
+    R -->|No| S[Export DOCX or CSV outputs]
+    O -->|Modify via chat| T[Analyst sends follow-up instruction]
+    T --> I
+    O -->|Reject| U[Keep current row state and log rejection]
+    U --> G
+    V[Edge case: AI gives wrong evidence] --> N
+    W[Edge case: Undo a previous accepted refinement] --> X[Use version timeline or undo action]
+    X --> G
+`</pre>
+
+<p class="footer-note">This flow includes the key edge cases from the assignment, including wrong evidence, missing evidence, and undo.</p>
+</body>
+</html>

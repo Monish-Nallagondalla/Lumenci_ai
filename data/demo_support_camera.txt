@@ -1,0 +1,6 @@
+Smart Camera Technical Notes
+
+The camera includes a CMOS image sensor that converts incoming light into digital image data.
+The device supports 2.4 GHz and 5 GHz Wi-Fi connections for remote preview and mobile application control.
+Automatic exposure logic evaluates ambient lighting and adjusts shutter speed and ISO settings in real time.
+The setup guide instructs users to connect the camera to the companion app through Wi-Fi onboarding.

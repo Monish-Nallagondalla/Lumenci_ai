@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Fixture</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell" style="max-width: 560px; padding-top: 24px;">
+      <aside class="panel review-panel">
+        <div class="drawer-header">
+          <div>
+            <p class="eyebrow">Step 4</p>
+            <h3>Review Drawer</h3>
+          </div>
+          <p class="subtle-text">Diff-first review before any change reaches the claim chart.</p>
+        </div>
+
+        <div class="suggestion-card">
+          <div class="suggestion-card-header">
+            <div>
+              <h3>Row 1 recommendation</h3>
+              <p class="suggestion-card-intro">
+                Review the proposed evidence and reasoning, inspect citations, and decide whether this update is strong enough to apply.
+              </p>
+            </div>
+            <span class="confidence-badge medium">Medium confidence</span>
+          </div>
+
+          <div class="suggestion-card-pills">
+            <span class="metric-pill">Row 1</span>
+            <span class="metric-pill">3 source snippet(s)</span>
+            <span class="metric-pill">Mode: fallback</span>
+          </div>
+
+          <div class="metric-ring-grid">
+            <section class="metric-panel">
+              <div class="metric-ring metric-ring--steady" style="--metric-progress:62;" role="img">
+                <div class="metric-ring__chart">
+                  <div class="metric-ring__center">
+                    <strong class="metric-ring__value">62%</strong>
+                    <span class="metric-ring__detail">medium</span>
+                  </div>
+                </div>
+                <div class="metric-ring__meta">
+                  <span class="metric-ring__label">AI Confidence</span>
+                  <span class="metric-ring__caption">Model confidence for this suggestion</span>
+                </div>
+              </div>
+            </section>
+            <section class="metric-panel">
+              <div class="metric-ring metric-ring--strong" style="--metric-progress:80;" role="img">
+                <div class="metric-ring__chart">
+                  <div class="metric-ring__center">
+                    <strong class="metric-ring__value">8</strong>
+                    <span class="metric-ring__detail">of 10</span>
+                  </div>
+                </div>
+                <div class="metric-ring__meta">
+                  <span class="metric-ring__label">Scrutiny Score</span>
+                  <span class="metric-ring__caption">Low residual risk</span>
+                </div>
+              </div>
+            </section>
+            <section class="metric-panel">
+              <div class="metric-ring metric-ring--strong" style="--metric-progress:100;" role="img">
+                <div class="metric-ring__chart">
+                  <div class="metric-ring__center">
+                    <strong class="metric-ring__value">100%</strong>
+                    <span class="metric-ring__detail">3 citations</span>
+                  </div>
+                </div>
+                <div class="metric-ring__meta">
+                  <span class="metric-ring__label">Citation Coverage</span>
+                  <span class="metric-ring__caption">3 mapped citation(s)</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="review-tab-bar">
+            <button class="review-tab active">Decision</button>
+            <button class="review-tab">Citations</button>
+            <button class="review-tab">Scrutiny</button>
+            <button class="review-tab">Challenge</button>
+          </div>
+
+          <div class="suggestion-tab-content">
+            <div class="diff-first-shell">
+              <div class="diff-summary-grid">
+                <section class="mini-diff-card">
+                  <h4>Evidence Change</h4>
+                  <p>Before: Marketing page states the thermostat monitors room climate.</p>
+                  <p>After: The thermostat contains an onboard ambient temperature sensor that samples room temperature every 30 seconds.</p>
+                </section>
+                <section class="mini-diff-card">
+                  <h4>Reasoning Change</h4>
+                  <p>Before: This suggests the product may include sensing capability, but the evidence is not very specific.</p>
+                  <p>After: The revision adds a missing mapped feature and removes vague language.</p>
+                </section>
+              </div>
+              <div class="diff-panels">
+                <section class="diff-panel">
+                  <div class="diff-panel-header">
+                    <h4>Evidence Diff</h4>
+                    <div class="diff-panel-summary">
+                      <span class="metric-pill">1 addition</span>
+                      <span class="metric-pill">1 removal</span>
+                    </div>
+                  </div>
+                  <div class="diff-panel-body">
+                    <section class="diff-change-card diff-change-card--removal">
+                      <div class="diff-change-card__header">
+                        <span class="diff-change-card__label">Removed Wording</span>
+                      </div>
+                      <div class="diff-change-list">
+                        <p class="diff-change-line">Marketing page states the thermostat monitors room climate.</p>
+                      </div>
+                    </section>
+                    <section class="diff-change-card diff-change-card--addition">
+                      <div class="diff-change-card__header">
+                        <span class="diff-change-card__label">Added Wording</span>
+                      </div>
+                      <div class="diff-change-list">
+                        <p class="diff-change-line">The thermostat contains an onboard ambient temperature sensor that samples room temperature every 30 seconds. The controller compares sensed temperature values against the user-defined setpoint and issues heating or cooling commands to the HVAC system.</p>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+                <section class="diff-panel">
+                  <div class="diff-panel-header">
+                    <h4>Reasoning Diff</h4>
+                    <div class="diff-panel-summary">
+                      <span class="metric-pill">1 addition</span>
+                      <span class="metric-pill">1 removal</span>
+                    </div>
+                  </div>
+                  <div class="diff-panel-body">
+                    <section class="diff-change-card diff-change-card--removal">
+                      <div class="diff-change-card__header">
+                        <span class="diff-change-card__label">Removed Wording</span>
+                      </div>
+                      <div class="diff-change-list">
+                        <p class="diff-change-line">This suggests the product may include sensing capability, but the evidence is not very specific.</p>
+                      </div>
+                    </section>
+                    <section class="diff-change-card diff-change-card--addition">
+                      <div class="diff-change-card__header">
+                        <span class="diff-change-card__label">Added Wording</span>
+                      </div>
+                      <div class="diff-change-list">
+                        <p class="diff-change-line">The revision adds a missing mapped feature by linking the claim language to the closest available technical description in the support materials.</p>
+                      </div>
+                    </section>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+            <div class="suggestion-block">
+              <h4>Rationale</h4>
+              <p>The updated evidence directly ties the product behavior to a temperature sensing feature and improves defensibility for review.</p>
+            </div>
+          </div>
+
+          <div class="review-actions">
+            <button class="btn btn-primary" type="button">Accept suggestion</button>
+            <button class="btn btn-secondary" type="button">Modify via chat</button>
+            <button class="btn btn-ghost" type="button">Reject suggestion</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </body>
+</html>

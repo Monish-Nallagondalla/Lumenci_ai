@@ -1,0 +1,6 @@
+Thermostat Installation and Control Guide
+
+The thermostat measures ambient temperature with an internal sensor and compares that reading against a stored target temperature.
+When the measured temperature falls outside the configured threshold, the control unit sends commands to adjust HVAC heating or cooling output.
+The thermostat supports Wi-Fi connectivity for mobile app control, remote monitoring, and software updates.
+Technical setup instructions describe the thermostat's Wi-Fi provisioning workflow in detail.

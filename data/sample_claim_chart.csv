@@ -1,0 +1,4 @@
+Patent Claim Element,Accused Product Feature / Evidence,AI Reasoning
+"A thermostat system comprising a temperature sensor","Marketing page states the thermostat monitors room climate.","This suggests the product may include sensing capability, but the evidence is not very specific."
+"The thermostat system includes a wireless communication module","The setup guide references Wi-Fi onboarding and mobile app pairing.","Wi-Fi onboarding indicates a wireless module that enables communication with the companion application."
+"The thermostat adjusts HVAC output based on detected temperature","","The chart does not yet map a concrete product behavior or technical source to this element."

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lumenci Claim Chart Refinement Demo</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="backdrop orb orb-a"></div>
+    <div class="backdrop orb orb-b"></div>
+    <div class="backdrop grid-fade"></div>
+
+    <div class="app-shell">
+      <div class="announcement-bar animate-in">
+        <span>Announcement: Lumenci leadership recognized in IAM Strategy 300 Global Leaders 2026</span>
+        <a href="#">Read More</a>
+      </div>
+
+      <header class="hero panel animate-in">
+        <div class="hero-copy">
+          <div class="brand-ribbon">
+            <div class="brand-lockup">
+              <div class="brand-mark" aria-hidden="true"></div>
+              <span class="brand-name">LUMENCI</span>
+            </div>
+            <span class="brand-tag">AI Claim Chart Refinement Demo</span>
+          </div>
+          <p class="eyebrow">Daily Workspace</p>
+          <h1>Claim Chart <span>Defensibility Workspace</span></h1>
+          <p class="hero-text">
+            Refine evidence, preserve citations, surface scrutiny risk, and track every decision
+            from v1 to the final legal-ready chart.
+          </p>
+        </div>
+        <div class="hero-status">
+          <div class="status-tile surface-info">
+            <span class="status-label">Workflow</span>
+            <strong>Human in the Loop</strong>
+          </div>
+          <div class="status-tile surface-info">
+            <span class="status-label">Inference</span>
+            <strong>Groq + fallback logic</strong>
+          </div>
+          <div class="status-tile surface-info">
+            <span class="status-label">Exports</span>
+            <strong>Word + CSV</strong>
+          </div>
+        </div>
+      </header>
+
+      <section id="workspaceIntake" class="panel upload-panel animate-in">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Step 1</p>
+            <h2>Workspace Intake</h2>
+          </div>
+          <div class="inline-metrics" id="workspaceMetrics"></div>
+        </div>
+
+        <div class="upload-grid">
+          <div class="upload-card surface-action">
+            <h3>Claim Chart</h3>
+            <p>Upload a CSV with the required three-column structure.</p>
+            <input id="claimChartInput" type="file" accept=".csv" />
+          </div>
+
+          <div class="upload-card surface-action">
+            <h3>Supporting Docs</h3>
+            <p>Upload TXT, PDF, or DOCX files to ground evidence and reasoning.</p>
+            <input id="supportingDocsInput" type="file" accept=".txt,.pdf,.docx" multiple />
+          </div>
+
+          <div class="upload-card upload-card-accent surface-action">
+            <h3>Quick Start</h3>
+            <p>Use the built-in thermostat sample or upload your own workspace.</p>
+            <div class="stacked-actions">
+              <button id="loadSampleButton" class="btn btn-secondary">Load sample workspace</button>
+              <button id="processWorkspaceButton" class="btn btn-primary">Parse and open workspace</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="evidence-bar">
+          <div class="evidence-intake surface-action">
+            <div>
+              <h3>Add More Evidence Mid-Review</h3>
+              <p>When the AI needs more support, append new documents or ingest a URL.</p>
+            </div>
+            <div class="evidence-controls">
+              <input id="additionalDocsInput" type="file" accept=".txt,.pdf,.docx" multiple />
+              <button id="appendDocsButton" class="btn btn-ghost">Append evidence</button>
+            </div>
+          </div>
+
+          <form id="urlIngestForm" class="url-form surface-action">
+            <input
+              id="urlInput"
+              type="url"
+              placeholder="https://example.com/technical-specification"
+            />
+            <button class="btn btn-ghost" type="submit">Ingest URL</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="kpiStrip" class="panel kpi-strip animate-in hidden">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Value Snapshot</p>
+            <h2>Progress From v1 to Current Version</h2>
+          </div>
+          <div class="inline-metrics" id="versionPill"></div>
+        </div>
+        <div class="kpi-layout">
+          <div id="kpiGrid" class="kpi-grid"></div>
+          <div class="improvement-panel surface-info">
+            <h3>Why This Reduces Risk</h3>
+            <div id="improvementSummary" class="improvement-summary"></div>
+          </div>
+        </div>
+      </section>
+
+      <main id="workspaceGrid" class="workspace-grid">
+        <aside id="workflowRail" class="panel workflow-rail animate-in">
+          <div class="rail-header">
+            <div class="rail-header-top">
+              <div>
+                <p class="eyebrow">Guided Flow</p>
+                <h2>Workflow Rail</h2>
+              </div>
+              <button
+                id="hideWorkflowButton"
+                class="btn btn-ghost rail-toggle"
+                type="button"
+                aria-controls="workflowRail"
+              >
+                Hide guide
+              </button>
+            </div>
+            <p class="rail-copy">
+              Keep the six-step refinement path visible while the team is onboarding, then hide it
+              once the workflow becomes muscle memory.
+            </p>
+          </div>
+          <div id="workflowSteps" class="workflow-steps"></div>
+        </aside>
+
+        <div class="workspace-stack">
+          <div id="workflowToggleBar" class="workflow-toggle-bar hidden">
+            <p class="workflow-toggle-copy">
+              Guided flow is hidden to free up workspace width. Restore it any time for the
+              step-by-step checklist.
+            </p>
+            <button
+              id="showWorkflowButton"
+              class="btn btn-secondary"
+              type="button"
+              aria-controls="workflowRail"
+            >
+              Restore guided flow
+            </button>
+          </div>
+
+          <section class="panel chart-panel animate-in">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Step 2</p>
+                <h2>Structured Claim Chart</h2>
+              </div>
+              <div class="inline-metrics" id="chartMetrics"></div>
+            </div>
+
+            <div id="selectedRowSpotlight" class="selectedRowSpotlight selected-row-spotlight empty-state">
+              Upload a claim chart or load the sample workspace to begin.
+            </div>
+
+            <div class="chart-header">
+              <span>Claim Element</span>
+              <span>Accused Product Feature / Evidence</span>
+              <span>AI Reasoning</span>
+            </div>
+            <div id="chartRows" class="chart-rows"></div>
+          </section>
+
+          <div class="assistant-sidebar">
+            <aside class="panel assistant-panel animate-in">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Step 3</p>
+                  <h2>Refinement Assistant</h2>
+                </div>
+                <div class="inline-metrics" id="assistantMetrics"></div>
+              </div>
+
+              <div id="chatLog" class="chat-log"></div>
+
+              <div class="quick-actions">
+                <button class="chip" data-prompt="Improve reasoning">Improve reasoning</button>
+                <button class="chip" data-prompt="Strengthen evidence">Strengthen evidence</button>
+                <button class="chip" data-prompt="Add missing feature">Add missing feature</button>
+                <button class="chip" data-prompt="Ask for stronger technical support">
+                  Ask for stronger technical support
+                </button>
+              </div>
+
+              <form id="chatComposer" class="chat-composer">
+                <textarea
+                  id="chatInput"
+                  rows="3"
+                  placeholder="Select a row, then ask for a refinement or follow-up."
+                ></textarea>
+                <div class="composer-actions">
+                  <span id="composerHint" class="subtle-text">
+                    The selected row stays unchanged until you accept a suggestion.
+                  </span>
+                  <button class="btn btn-primary" type="submit">Generate suggestion</button>
+                </div>
+              </form>
+            </aside>
+
+            <aside class="panel review-panel animate-in">
+              <div class="drawer-header">
+                <div>
+                  <p class="eyebrow">Step 4</p>
+                  <h3>Review Drawer</h3>
+                </div>
+                <p class="subtle-text">Diff-first review before any change reaches the claim chart.</p>
+              </div>
+
+              <div id="reviewDrawerEmpty" class="review-drawer-empty">
+                Generate a suggestion to open the review drawer, compare the diff, and approve or
+                reject without losing your place in chat.
+              </div>
+
+              <div id="reviewPanelBody" class="review-panel-body">
+                <div id="needsEvidenceCard" class="needs-evidence-card hidden"></div>
+                <div id="suggestionCard" class="suggestion-card hidden"></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </main>
+
+      <section class="panel history-panel animate-in">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Reference Center</p>
+            <h2>Versioning, Readiness, and Exports</h2>
+          </div>
+          <div class="bottom-tab-bar" id="bottomTabBar">
+            <button class="bottom-tab active" data-bottom-tab="history">Version Timeline</button>
+            <button class="bottom-tab" data-bottom-tab="court">Court Readiness</button>
+            <button class="bottom-tab" data-bottom-tab="export">Exports</button>
+          </div>
+        </div>
+
+        <div id="historyTabPanel" class="bottom-panel">
+          <div id="historyList" class="history-list"></div>
+        </div>
+
+        <div id="courtTabPanel" class="bottom-panel hidden">
+          <div class="export-card surface-info">
+            <h3>Court Readiness</h3>
+            <p>Likely scrutiny points and challenge questions for the selected or latest-reviewed row.</p>
+            <div id="courtPrepPanel" class="court-prep-panel"></div>
+          </div>
+        </div>
+
+        <div id="exportTabPanel" class="bottom-panel hidden">
+          <div class="export-grid">
+            <div class="export-card surface-action">
+              <h3>Final Deliverables</h3>
+              <p>Keep fast pointers in-app and download deeper legal reference material when needed.</p>
+              <div class="stacked-actions">
+                <button id="exportChartDocxButton" class="btn btn-primary">Download claim chart (.docx)</button>
+                <button id="exportSummaryDocxButton" class="btn btn-secondary">Download legal summary (.docx)</button>
+                <button id="exportCsvButton" class="btn btn-ghost">Download working chart (.csv)</button>
+                <button id="undoButton" class="btn btn-ghost danger">Undo last accepted change</button>
+              </div>
+            </div>
+
+            <div class="export-card flow-card surface-info">
+              <h3>Refinement Path</h3>
+              <ol class="flow-list">
+                <li>Upload claim chart and support material.</li>
+                <li>Review flagged rows in the structured chart.</li>
+                <li>Request a refinement for the selected element.</li>
+                <li>Accept, modify, or reject the AI suggestion.</li>
+                <li>Export the final chart and summary report.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="toastHost" class="toast-host"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
