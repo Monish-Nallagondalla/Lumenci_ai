@@ -1,6 +1,17 @@
-Smart Camera Technical Notes
+NovaCam X2 Indoor Camera
+Technical Notes and Setup Excerpts
 
-The camera includes a CMOS image sensor that converts incoming light into digital image data.
-The device supports 2.4 GHz and 5 GHz Wi-Fi connections for remote preview and mobile application control.
-Automatic exposure logic evaluates ambient lighting and adjusts shutter speed and ISO settings in real time.
-The setup guide instructs users to connect the camera to the companion app through Wi-Fi onboarding.
+Document: Hardware and Imaging Specification
+Product: NovaCam X2 Indoor Camera
+
+Section 1.2 - Imaging Hardware
+The camera incorporates a CMOS image sensor that converts incoming light into digital image data for downstream image processing.
+
+Section 3.1 - Wireless Connectivity
+The device supports both 2.4 GHz and 5 GHz Wi-Fi connections for remote live preview, mobile application control, and alert delivery.
+
+Section 3.2 - App Onboarding
+The setup guide instructs users to pair the camera with the companion application through Wi-Fi onboarding before enabling remote controls.
+
+Section 5.4 - Exposure Control
+Automatic exposure logic evaluates ambient lighting conditions and adjusts shutter speed and ISO settings in real time to maintain usable image brightness.

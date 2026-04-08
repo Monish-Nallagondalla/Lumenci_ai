@@ -1,0 +1,4 @@
+Patent Claim Element,Accused Product Feature / Evidence,AI Reasoning
+"1[a] A camera system comprising an image sensor","Marketing page states that the camera captures sharp images in low-light environments.","The current support suggests image sensing capability, but it should be replaced with a technical source that expressly describes the imaging hardware."
+"1[b] The camera system includes wireless communication for remote control","Setup Guide, Wi-Fi Onboarding: ""Connect the camera to the companion app over 2.4 GHz or 5 GHz Wi-Fi for remote preview and remote control.""","The setup workflow indicates that the device supports wireless communication used for remote control through the companion application."
+"1[c] The camera automatically adjusts exposure based on scene conditions","","No technical evidence has yet been mapped for the automatic exposure limitation."

@@ -28,7 +28,6 @@ const elements = {
   supportingDocsInput: document.getElementById("supportingDocsInput"),
   additionalDocsInput: document.getElementById("additionalDocsInput"),
   processWorkspaceButton: document.getElementById("processWorkspaceButton"),
-  loadSampleButton: document.getElementById("loadSampleButton"),
   appendDocsButton: document.getElementById("appendDocsButton"),
   urlIngestForm: document.getElementById("urlIngestForm"),
   urlInput: document.getElementById("urlInput"),
@@ -42,9 +41,9 @@ const elements = {
   exportTabPanel: document.getElementById("exportTabPanel"),
   workflowRail: document.getElementById("workflowRail"),
   workflowSteps: document.getElementById("workflowSteps"),
-  workflowToggleBar: document.getElementById("workflowToggleBar"),
   hideWorkflowButton: document.getElementById("hideWorkflowButton"),
-  showWorkflowButton: document.getElementById("showWorkflowButton"),
+  workflowPeekButton: document.getElementById("workflowPeekButton"),
+  workflowPeekStep: document.getElementById("workflowPeekStep"),
   workspaceMetrics: document.getElementById("workspaceMetrics"),
   chartMetrics: document.getElementById("chartMetrics"),
   assistantMetrics: document.getElementById("assistantMetrics"),
@@ -67,12 +66,10 @@ const elements = {
   toastHost: document.getElementById("toastHost"),
 };
 
-const quickActions = [...document.querySelectorAll(".chip")];
-
+const quickActions = [...document.querySelectorAll(".quick-actions .chip")];
 init();
 
 function init() {
-  elements.loadSampleButton.addEventListener("click", loadSampleWorkspace);
   elements.processWorkspaceButton.addEventListener("click", parseUploadedWorkspace);
   elements.appendDocsButton.addEventListener("click", appendSupportingDocs);
   elements.urlIngestForm.addEventListener("submit", handleUrlIngest);
@@ -85,8 +82,8 @@ function init() {
   elements.suggestionCard.addEventListener("click", handleSuggestionActions);
   elements.needsEvidenceCard.addEventListener("click", handleNeedsEvidenceActions);
   elements.bottomTabBar?.addEventListener("click", handleBottomTabChange);
-  elements.hideWorkflowButton?.addEventListener("click", () => setWorkflowHidden(true));
-  elements.showWorkflowButton?.addEventListener("click", () => setWorkflowHidden(false));
+  elements.hideWorkflowButton?.addEventListener("click", () => setWorkflowHidden(!state.workflowHidden));
+  elements.workflowPeekButton?.addEventListener("click", () => setWorkflowHidden(false));
 
   quickActions.forEach((button) =>
     button.addEventListener("click", () => {
@@ -94,18 +91,7 @@ function init() {
       elements.chatInput.focus();
     }),
   );
-
   render();
-}
-
-async function loadSampleWorkspace() {
-  try {
-    const payload = await postJson("/api/load-sample", {});
-    hydrateWorkspace(payload);
-    toast("Sample workspace loaded.", "success");
-  } catch (error) {
-    toast(error.message, "error");
-  }
 }
 
 async function parseUploadedWorkspace() {
@@ -207,7 +193,7 @@ async function handleChatSubmit(event) {
     state.reviewTab = "decision";
     appendChat(
       "assistant",
-      `Prepared a ${suggestion.confidence.toLowerCase()}-confidence suggestion for row ${row.row_id}.`,
+      buildSuggestionChatMessage(row.row_id, suggestion),
     );
     render();
   } catch (error) {
@@ -490,13 +476,18 @@ function syncLoadedMode() {
 }
 
 function renderWorkflowVisibility() {
-  elements.workspaceGrid?.classList.toggle("workflow-hidden", state.workflowHidden);
-  elements.workflowRail?.classList.toggle("hidden", state.workflowHidden);
-  elements.workflowToggleBar?.classList.toggle("hidden", !state.workflowHidden);
-  elements.workflowRail?.setAttribute("aria-hidden", String(state.workflowHidden));
-  elements.workflowToggleBar?.setAttribute("aria-hidden", String(!state.workflowHidden));
+  document.body.classList.toggle("workflow-collapsed", state.workflowHidden);
+  elements.workflowRail?.classList.toggle("collapsed", state.workflowHidden);
+  elements.workflowPeekButton?.classList.toggle("hidden", !state.workflowHidden);
   elements.hideWorkflowButton?.setAttribute("aria-expanded", String(!state.workflowHidden));
-  elements.showWorkflowButton?.setAttribute("aria-expanded", String(!state.workflowHidden));
+  elements.workflowPeekButton?.setAttribute("aria-expanded", String(!state.workflowHidden));
+  if (elements.hideWorkflowButton) {
+    elements.hideWorkflowButton.textContent = state.workflowHidden ? "Show" : "Hide";
+    elements.hideWorkflowButton.setAttribute(
+      "aria-label",
+      state.workflowHidden ? "Show guided flow" : "Hide guided flow",
+    );
+  }
 }
 
 function renderKpis() {
@@ -612,6 +603,10 @@ function renderWorkflow() {
             ? 6
             : 4;
 
+  if (elements.workflowPeekStep) {
+    elements.workflowPeekStep.textContent = String(currentStage).padStart(2, "0");
+  }
+
   const steps = [
     {
       title: "Intake Sources",
@@ -680,7 +675,11 @@ function renderWorkflow() {
   elements.workflowSteps.innerHTML = steps
     .map(
       (step, index) => `
-        <article class="workflow-step ${step.status}">
+        <article
+          class="workflow-step ${step.status}"
+          title="${escapeHtml(step.title)}"
+          aria-label="${escapeHtml(`${step.title}. ${step.copy}`)}"
+        >
           <span class="workflow-step-index">0${index + 1}</span>
           <strong class="workflow-step-title">${escapeHtml(step.title)}</strong>
           <p class="workflow-step-copy">${escapeHtml(step.copy)}</p>
@@ -1037,6 +1036,24 @@ function setWorkflowHidden(hidden) {
 
 function appendChat(role, content) {
   state.chatHistory.push({ role, content });
+}
+
+function buildSuggestionChatMessage(rowId, suggestion) {
+  const lines = [
+    `Prepared a ${String(suggestion.confidence || "medium").toLowerCase()}-confidence suggestion for row ${rowId}.`,
+    "",
+    `Suggested evidence: ${truncate(suggestion.proposed_evidence || "No proposed evidence.", 220)}`,
+    "",
+    `Suggested reasoning: ${truncate(suggestion.proposed_reasoning || "No proposed reasoning.", 220)}`,
+  ];
+
+  if (suggestion.needs_more_evidence) {
+    lines.push("", `Needs more evidence: ${suggestion.suggested_follow_up || "Upload more technical material or ingest a URL."}`);
+  } else {
+    lines.push("", "Open the review drawer to compare the diff, inspect citations, and accept, reject, or modify.");
+  }
+
+  return lines.join("\n");
 }
 
 function getSelectedRow() {

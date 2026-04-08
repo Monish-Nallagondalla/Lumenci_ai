@@ -61,24 +61,24 @@
         <div class="upload-grid">
           <div class="upload-card surface-action">
             <h3>Claim Chart</h3>
-            <p>Upload a CSV with the required three-column structure.</p>
+            <p>Upload a CSV with claim elements. Existing evidence and reasoning columns are optional.</p>
             <input id="claimChartInput" type="file" accept=".csv" />
           </div>
 
-          <div class="upload-card surface-action">
-            <h3>Supporting Docs</h3>
-            <p>Upload TXT, PDF, or DOCX files to ground evidence and reasoning.</p>
+            <div class="upload-card surface-action">
+              <h3>Supporting Docs</h3>
+            <p>Upload TXT, PDF, or DOCX files so the system can generate and strengthen the mapping.</p>
             <input id="supportingDocsInput" type="file" accept=".txt,.pdf,.docx" multiple />
           </div>
 
-          <div class="upload-card upload-card-accent surface-action">
-            <h3>Quick Start</h3>
-            <p>Use the built-in thermostat sample or upload your own workspace.</p>
+            <div class="upload-card upload-card-accent surface-action">
+              <h3>Open Workspace</h3>
+            <p>Upload the claim chart and supporting material, then parse the workspace to begin refinement.</p>
             <div class="stacked-actions">
-              <button id="loadSampleButton" class="btn btn-secondary">Load sample workspace</button>
               <button id="processWorkspaceButton" class="btn btn-primary">Parse and open workspace</button>
             </div>
           </div>
+
         </div>
 
         <div class="evidence-bar">
@@ -121,13 +121,23 @@
         </div>
       </section>
 
+      <button
+        id="workflowPeekButton"
+        class="workflow-peek-button hidden"
+        type="button"
+        aria-controls="workflowRail"
+      >
+        <span class="workflow-peek-label">Flow</span>
+        <span id="workflowPeekStep" class="workflow-peek-step">01</span>
+      </button>
+
       <main id="workspaceGrid" class="workspace-grid">
         <aside id="workflowRail" class="panel workflow-rail animate-in">
           <div class="rail-header">
             <div class="rail-header-top">
               <div>
                 <p class="eyebrow">Guided Flow</p>
-                <h2>Workflow Rail</h2>
+                <h2>Workflow Steps</h2>
               </div>
               <button
                 id="hideWorkflowButton"
@@ -135,33 +145,18 @@
                 type="button"
                 aria-controls="workflowRail"
               >
-                Hide guide
+                Collapse
               </button>
             </div>
             <p class="rail-copy">
-              Keep the six-step refinement path visible while the team is onboarding, then hide it
-              once the workflow becomes muscle memory.
+              Keep a compact view of the six-step refinement path visible so the current stage is
+              always in sight.
             </p>
           </div>
           <div id="workflowSteps" class="workflow-steps"></div>
         </aside>
 
         <div class="workspace-stack">
-          <div id="workflowToggleBar" class="workflow-toggle-bar hidden">
-            <p class="workflow-toggle-copy">
-              Guided flow is hidden to free up workspace width. Restore it any time for the
-              step-by-step checklist.
-            </p>
-            <button
-              id="showWorkflowButton"
-              class="btn btn-secondary"
-              type="button"
-              aria-controls="workflowRail"
-            >
-              Restore guided flow
-            </button>
-          </div>
-
           <section class="panel chart-panel animate-in">
             <div class="panel-heading">
               <div>
@@ -172,13 +167,13 @@
             </div>
 
             <div id="selectedRowSpotlight" class="selectedRowSpotlight selected-row-spotlight empty-state">
-              Upload a claim chart or load the sample workspace to begin.
+              Upload a claim chart and supporting documents to begin.
             </div>
 
             <div class="chart-header">
               <span>Claim Element</span>
               <span>Accused Product Feature / Evidence</span>
-              <span>AI Reasoning</span>
+              <span>Reasoning</span>
             </div>
             <div id="chartRows" class="chart-rows"></div>
           </section>

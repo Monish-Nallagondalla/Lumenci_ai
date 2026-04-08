@@ -89,15 +89,16 @@ http://localhost:8000
 
 ## Recommended demo flow
 
-1. Open the app and click `Load sample workspace`, or upload your own CSV plus support files.
-2. Review flagged rows in the chart.
-3. Select a claim element row.
-4. Use a quick action like `Strengthen evidence` or enter a custom prompt in chat.
-5. Review the AI suggestion card with source basis, confidence, evaluator scores, and before/after diff.
-6. Accept, reject, or modify via chat.
-7. If the suggestion needs more evidence, append more support docs or ingest a technical URL.
-8. Use `Undo last accepted change` if needed.
-9. Export the final claim chart `.docx` and the version summary `.docx`.
+1. Open the app and upload your own CSV plus support files.
+2. Click `Parse and open workspace`.
+3. Review flagged rows in the chart.
+4. Select a claim element row.
+5. Use a quick action like `Strengthen evidence` or enter a custom prompt in chat.
+6. Review the AI suggestion card with source basis, confidence, evaluator scores, and before/after diff.
+7. Accept, reject, or modify via chat.
+8. If the suggestion needs more evidence, append more support docs or ingest a technical URL.
+9. Use `Undo last accepted change` if needed.
+10. Export the final claim chart `.docx` and the version summary `.docx`.
 
 ## What is real vs simplified
 
@@ -146,3 +147,4 @@ Use the files in `data/` to test both upload sections:
 
 - The app is built for assignment/demo quality: strong flow, clear UX, and modular code rather than production infrastructure.
 - If Groq is not configured, the UI still works and shows fallback suggestions so the demo can proceed end to end.
+- Uploaded CSVs only need a claim-element column. Existing evidence and reasoning columns are supported but not required.

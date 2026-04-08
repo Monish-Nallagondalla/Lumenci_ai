@@ -22,7 +22,8 @@
   --radius-sm: 10px;
   --font-body: "Aptos", "Segoe UI Variable Text", "Trebuchet MS", sans-serif;
   --font-display: "Segoe UI Variable Display", "Aptos Display", "Segoe UI", sans-serif;
-  --workflow-rail-width: clamp(268px, 22vw, 320px);
+  --workflow-rail-width: clamp(154px, 12vw, 184px);
+  --workflow-rail-collapsed-width: 62px;
   --workspace-gap: clamp(18px, 2vw, 26px);
 }
 
@@ -572,7 +573,7 @@ textarea {
 .workflow-rail {
   width: 100%;
   min-width: 0;
-  padding: 20px;
+  padding: 14px;
   position: sticky;
   top: 20px;
   align-self: start;
@@ -582,8 +583,8 @@ textarea {
 
 .rail-header {
   display: grid;
-  gap: 14px;
-  padding-bottom: 18px;
+  gap: 12px;
+  padding-bottom: 14px;
   border-bottom: 1px solid rgba(202, 211, 221, 0.65);
 }
 
@@ -596,34 +597,35 @@ textarea {
 
 .rail-header h2 {
   margin: 0;
-  font-size: 1.18rem;
+  font-size: 0.96rem;
 }
 
 .rail-toggle {
   flex-shrink: 0;
-  padding-inline: 14px;
+  min-width: 72px;
+  padding-inline: 10px;
 }
 
 .rail-copy {
   margin: 0;
   color: var(--text-soft);
   line-height: 1.45;
-  font-size: 0.92rem;
-  max-width: 30ch;
+  font-size: 0.84rem;
+  max-width: 24ch;
 }
 
 .workflow-steps {
   display: grid;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 14px;
 }
 
 .workflow-step {
   position: relative;
   display: grid;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
-  padding: 16px 16px 16px 60px;
+  padding: 11px 10px 11px 42px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(251, 245, 241, 0.82));
@@ -637,9 +639,9 @@ textarea {
 .workflow-step:not(:last-child)::after {
   content: "";
   position: absolute;
-  left: 28px;
-  top: 52px;
-  bottom: -11px;
+  left: 18px;
+  top: 39px;
+  bottom: -9px;
   width: 2px;
   background: linear-gradient(180deg, rgba(198, 209, 223, 0.72), rgba(198, 209, 223, 0.12));
 }
@@ -667,30 +669,30 @@ textarea {
 .workflow-step-title {
   display: block;
   font-weight: 700;
-  font-size: 0.92rem;
+  font-size: 0.8rem;
 }
 
 .workflow-step-copy {
   margin: 0;
   color: var(--text-soft);
   line-height: 1.42;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
 }
 
 .workflow-step-index {
   position: absolute;
-  left: 14px;
-  top: 16px;
+  left: 7px;
+  top: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   margin-bottom: 0;
-  border-radius: 11px;
+  border-radius: 9px;
   background: rgba(198, 209, 223, 0.18);
   color: var(--text-soft);
-  font-size: 0.8rem;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
@@ -706,28 +708,50 @@ textarea {
   color: var(--ok);
 }
 
-.workflow-toggle-bar {
-  grid-column: 1 / -1;
+.workflow-peek-button {
+  position: fixed;
+  left: 10px;
+  top: 138px;
+  z-index: 24;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 18px;
-  border-radius: var(--radius-lg);
-  border: 1px dashed rgba(255, 90, 0, 0.24);
-  background: linear-gradient(180deg, rgba(255, 252, 249, 0.98), rgba(255, 244, 238, 0.9));
+  gap: 8px;
+  width: 54px;
+  padding: 10px 8px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 90, 0, 0.16);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 16px 32px rgba(28, 36, 49, 0.1);
 }
 
-.workflow-toggle-copy {
-  margin: 0;
-  flex: 1;
+.workflow-peek-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--text-soft);
-  line-height: 1.45;
+}
+
+.workflow-peek-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  background: rgba(255, 90, 0, 0.1);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
 }
 
 .upload-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 18px;
 }
 
@@ -831,14 +855,10 @@ textarea {
 
 .workspace-grid {
   display: grid;
-  grid-template-columns: var(--workflow-rail-width) minmax(0, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--workspace-gap);
   margin-top: 24px;
   align-items: start;
-}
-
-.workspace-grid.workflow-hidden {
-  grid-template-columns: 1fr;
 }
 
 .workspace-stack {
@@ -1595,14 +1615,112 @@ input[type="file"] {
   }
 }
 
-@media (max-width: 980px) {
-  .workspace-grid {
-    grid-template-columns: 1fr;
+@media (min-width: 981px) {
+  body:not(.workflow-collapsed) .app-shell {
+    padding-left: calc(24px + var(--workflow-rail-width) + 18px);
   }
 
-  .workflow-rail,
-  .workflow-toggle-bar {
+  body.workflow-collapsed .app-shell {
+    padding-left: calc(24px + var(--workflow-rail-collapsed-width) + 18px);
+  }
+
+  .workflow-rail {
+    position: fixed;
+    top: 138px;
+    left: max(12px, calc((100vw - 1520px) / 2 + 12px));
+    width: var(--workflow-rail-width);
+    max-height: calc(100vh - 156px);
+    overflow-y: auto;
+    z-index: 22;
+    box-shadow: 0 18px 34px rgba(28, 36, 49, 0.08);
+  }
+
+  body.loaded-mode .workflow-rail {
+    top: 92px;
+    max-height: calc(100vh - 110px);
+  }
+
+  body.loaded-mode .workflow-peek-button {
+    top: 92px;
+  }
+
+  .workflow-rail.collapsed {
+    width: var(--workflow-rail-collapsed-width);
+    padding: 10px 8px;
+  }
+
+  .workflow-rail.collapsed .rail-header {
+    gap: 0;
+    padding-bottom: 8px;
+    border-bottom: 0;
+  }
+
+  .workflow-rail.collapsed .rail-header-top {
+    justify-content: center;
+  }
+
+  .workflow-rail.collapsed .rail-header-top > div,
+  .workflow-rail.collapsed .rail-copy,
+  .workflow-rail.collapsed .workflow-step-title,
+  .workflow-rail.collapsed .workflow-step-copy {
+    display: none;
+  }
+
+  .workflow-rail.collapsed .rail-toggle {
+    min-width: 0;
+    width: 100%;
+    min-height: 34px;
+    padding: 0;
+    font-size: 0.7rem;
+    border-radius: 12px;
+  }
+
+  .workflow-rail.collapsed .workflow-steps {
+    margin-top: 8px;
+    gap: 10px;
+  }
+
+  .workflow-rail.collapsed .workflow-step {
+    padding: 0;
+    min-height: 38px;
+    place-items: center;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .workflow-rail.collapsed .workflow-step:not(:last-child)::after {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 30px;
+    bottom: -10px;
+  }
+
+  .workflow-rail.collapsed .workflow-step-index {
     position: static;
+    width: 28px;
+    height: 28px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 980px) {
+  .workflow-peek-button {
+    top: auto;
+    bottom: 18px;
+    left: 18px;
+    flex-direction: row;
+    width: auto;
+    padding: 10px 12px;
+  }
+
+  .workflow-peek-label {
+    writing-mode: initial;
+    transform: none;
+  }
+
+  .workflow-rail {
+    position: static;
+    width: 100%;
   }
 }
 
@@ -1629,8 +1747,7 @@ input[type="file"] {
     grid-template-columns: 1fr;
   }
 
-  .rail-header-top,
-  .workflow-toggle-bar {
+  .rail-header-top {
     flex-direction: column;
     align-items: stretch;
   }

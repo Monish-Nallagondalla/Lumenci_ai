@@ -1,7 +1,17 @@
-Lumenci Smart Thermostat Technical Overview
+Lumenci Smart Thermostat
+Product Specification and Installation Excerpts
 
-The thermostat contains an onboard ambient temperature sensor that samples room temperature every 30 seconds.
-The controller compares sensed temperature values against the user-defined setpoint and issues heating or cooling commands to the HVAC system.
-The device includes 2.4 GHz Wi-Fi for remote monitoring, OTA updates, and companion mobile application control.
-Installation documentation explains how users pair the thermostat to the app through Wi-Fi provisioning.
-The product specification notes that the thermostat automatically adjusts HVAC output when measured temperature deviates from the configured threshold.
+Document: Technical Overview v2.4
+Product: Lumenci Smart Thermostat
+
+Section 2.1 - Temperature Sensing
+The thermostat contains an internal ambient temperature sensor that samples room temperature every 30 seconds and forwards the measured value to the control board.
+
+Section 2.3 - Control Logic
+The controller compares the sensed room temperature against the user-configured setpoint and issues heating or cooling commands to the HVAC interface when the measured temperature falls outside the permitted threshold band.
+
+Section 4.1 - Wireless Connectivity
+The device includes a 2.4 GHz Wi-Fi radio used for mobile application pairing, remote monitoring, and cloud-based settings synchronization.
+
+Section 4.2 - Mobile App Provisioning
+During onboarding, the installer connects the thermostat to the companion mobile application through Wi-Fi provisioning and account linking.
