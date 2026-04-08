@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -11,7 +11,7 @@ class ClaimChartRowModel(BaseModel):
     evidence: str = ""
     reasoning: str = ""
     status: str = "original"
-    weakness_flags: list[str] = Field(default_factory=list)
+    weakness_flags: List[str] = Field(default_factory=list)
 
 
 class SupportingDocModel(BaseModel):
@@ -22,15 +22,15 @@ class SupportingDocModel(BaseModel):
 
 
 class WorkspaceResponse(BaseModel):
-    chart_rows: list[ClaimChartRowModel]
-    supporting_docs: list[SupportingDocModel]
+    chart_rows: List[ClaimChartRowModel]
+    supporting_docs: List[SupportingDocModel]
     assistant_message: str
 
 
 class RefineRequest(BaseModel):
     row: ClaimChartRowModel
     request: str
-    supporting_docs: list[SupportingDocModel] = Field(default_factory=list)
+    supporting_docs: List[SupportingDocModel] = Field(default_factory=list)
 
 
 class UrlIngestRequest(BaseModel):
@@ -49,20 +49,20 @@ class VersionHistoryEntryModel(BaseModel):
     old_reasoning: str
     new_reasoning: str
     confidence: str
-    scores: dict
+    scores: Dict[str, Any]
     summary: str
-    citations: list[dict] = Field(default_factory=list)
-    scrutiny: dict = Field(default_factory=dict)
-    challenge_questions: list[dict] = Field(default_factory=list)
-    version_metrics: dict = Field(default_factory=dict)
+    citations: List[Dict] = Field(default_factory=list)
+    scrutiny: Dict[str, Any] = Field(default_factory=dict)
+    challenge_questions: List[Dict] = Field(default_factory=list)
+    version_metrics: Dict[str, Any] = Field(default_factory=dict)
 
 
 class ExportChartRequest(BaseModel):
-    rows: list[ClaimChartRowModel]
+    rows: List[ClaimChartRowModel]
     title: str = "Lumenci Refined Claim Chart"
 
 
 class ExportSummaryRequest(BaseModel):
-    version_history: list[VersionHistoryEntryModel]
-    chart_rows: list[ClaimChartRowModel]
+    version_history: List[VersionHistoryEntryModel]
+    chart_rows: List[ClaimChartRowModel]
     title: str = "Lumenci Version Summary Report"
