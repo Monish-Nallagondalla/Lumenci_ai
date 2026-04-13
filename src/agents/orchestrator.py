@@ -17,7 +17,13 @@ class Orchestrator:
         self.reasoning_agent = ReasoningAgent()
         self.evaluator_agent = EvaluatorAgent()
 
-    def refine_row(self, row: dict, request: str, supporting_docs: list[dict]) -> dict:
+    def refine_row(
+        self,
+        row: dict,
+        request: str,
+        supporting_docs: list[dict],
+        api_key: str | None = None,
+    ) -> dict:
         snippets = self.retrieval_agent.retrieve(row["claim_element"], supporting_docs)
         citations = build_citations(snippets, row["claim_element"])
         suggestion = self.reasoning_agent.refine(
@@ -26,6 +32,7 @@ class Orchestrator:
             existing_reasoning=row["reasoning"],
             request=request,
             retrieved_snippets=snippets,
+            api_key=api_key,
         )
         scores = self.evaluator_agent.evaluate(
             claim_element=row["claim_element"],

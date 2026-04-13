@@ -1,1 +1,1 @@
-"""Backend package for the Lumenci refinement demo."""
+"""Backend package for the ClaimCraft AI refinement workspace."""

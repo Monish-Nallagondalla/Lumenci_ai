@@ -119,7 +119,7 @@ def undo_last_change() -> None:
 
 
 section_header(
-    "Lumenci AI Claim Chart Refinement Demo",
+    "ClaimCraft AI Claim Chart Workspace",
     "Human-in-the-loop prototype for claim chart review, refinement, versioning, and export.",
 )
 

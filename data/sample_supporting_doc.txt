@@ -1,8 +1,8 @@
-Lumenci Smart Thermostat
+Aster Smart Thermostat
 Product Specification and Installation Excerpts
 
 Document: Technical Overview v2.4
-Product: Lumenci Smart Thermostat
+Product: Aster Smart Thermostat
 
 Section 2.1 - Temperature Sensing
 The thermostat contains an internal ambient temperature sensor that samples room temperature every 30 seconds and forwards the measured value to the control board.

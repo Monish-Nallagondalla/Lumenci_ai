@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 WEB_DIR = BASE_DIR / "web"
 
-app = FastAPI(title="Lumenci Claim Chart Refinement Demo API")
+app = FastAPI(title="ClaimCraft AI Claim Chart Workspace API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -152,11 +152,15 @@ def ingest_url_source(payload: UrlIngestRequest) -> JSONResponse:
 
 
 @app.post("/api/refine")
-def refine_row(payload: RefineRequest) -> JSONResponse:
+def refine_row(
+    payload: RefineRequest,
+    x_groq_api_key: str | None = Header(default=None, alias="X-Groq-API-Key"),
+) -> JSONResponse:
     suggestion = refinement_service.generate_suggestion(
         row=payload.row.model_dump(),
         request=payload.request,
         supporting_docs=[doc.model_dump() for doc in payload.supporting_docs],
+        api_key=(x_groq_api_key or "").strip() or None,
     )
     return JSONResponse(content=suggestion)
 
@@ -171,7 +175,7 @@ def export_chart_docx(payload: ExportChartRequest) -> StreamingResponse:
         iter([content]),
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={
-            "Content-Disposition": 'attachment; filename="lumenci_refined_claim_chart.docx"'
+            "Content-Disposition": 'attachment; filename="claimcraft_refined_claim_chart.docx"'
         },
     )
 
@@ -187,7 +191,7 @@ def export_summary_docx(payload: ExportSummaryRequest) -> StreamingResponse:
         iter([content]),
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={
-            "Content-Disposition": 'attachment; filename="lumenci_version_summary.docx"'
+            "Content-Disposition": 'attachment; filename="claimcraft_version_summary.docx"'
         },
     )
 
@@ -198,7 +202,7 @@ def export_chart(payload: ExportChartRequest) -> StreamingResponse:
     return StreamingResponse(
         iter([content]),
         media_type="text/csv",
-        headers={"Content-Disposition": 'attachment; filename="lumenci_refined_claim_chart.csv"'},
+        headers={"Content-Disposition": 'attachment; filename="claimcraft_refined_claim_chart.csv"'},
     )
 
 

@@ -19,23 +19,34 @@ class GroqRefinementClient:
         self._llm = None
 
         if self.api_key:
-            from langchain_groq import ChatGroq
+            self._llm = self._build_llm(self.api_key)
 
-            self._llm = ChatGroq(
-                groq_api_key=self.api_key,
-                model_name=self.model_name,
-                temperature=0.2,
-            )
+    def _build_llm(self, api_key: str):
+        from langchain_groq import ChatGroq
+
+        return ChatGroq(
+            groq_api_key=api_key,
+            model_name=self.model_name,
+            temperature=0.2,
+        )
 
     @property
     def available(self) -> bool:
         return self._llm is not None
 
-    def generate_refinement(self, user_prompt: str) -> Dict[str, Any]:
-        if not self._llm:
+    def can_infer(self, api_key: str | None = None) -> bool:
+        return bool((api_key or "").strip() or self._llm)
+
+    def generate_refinement(self, user_prompt: str, api_key: str | None = None) -> Dict[str, Any]:
+        override_key = (api_key or "").strip()
+        llm = self._llm
+        if override_key:
+            llm = self._build_llm(override_key)
+
+        if not llm:
             raise RuntimeError("Groq client is not configured.")
 
-        response = self._llm.invoke(
+        response = llm.invoke(
             [
                 SystemMessage(content=REFINEMENT_SYSTEM_PROMPT),
                 HumanMessage(content=user_prompt),

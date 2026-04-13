@@ -17,11 +17,12 @@ class ReasoningAgent:
         existing_reasoning: str,
         request: str,
         retrieved_snippets: list[dict],
+        api_key: str | None = None,
     ) -> dict:
         support_context = "\n".join(
             f"[{item['source_name']}] {item['snippet']}" for item in retrieved_snippets
         )
-        if self.client.available:
+        if self.client.can_infer(api_key):
             prompt = build_refinement_user_prompt(
                 claim_element=claim_element,
                 evidence=existing_evidence,
@@ -30,7 +31,7 @@ class ReasoningAgent:
                 support_context=support_context,
             )
             try:
-                result = self.client.generate_refinement(prompt)
+                result = self.client.generate_refinement(prompt, api_key=api_key)
                 result["mode"] = "groq"
                 return result
             except Exception:

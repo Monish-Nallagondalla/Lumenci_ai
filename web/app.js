@@ -1,4 +1,5 @@
-const WORKFLOW_VISIBILITY_KEY = "lumenci.workflow.hidden";
+const WORKFLOW_VISIBILITY_KEY = "claimcraft.workflow.hidden";
+const GROQ_API_KEY_STORAGE_KEY = "claimcraft.groq.apiKey";
 
 const state = {
   rows: [],
@@ -20,6 +21,7 @@ const state = {
   reviewTab: "decision",
   bottomTab: "history",
   workflowHidden: loadWorkflowVisibility(),
+  groqApiKey: loadGroqApiKey(),
 };
 
 const elements = {
@@ -28,6 +30,10 @@ const elements = {
   supportingDocsInput: document.getElementById("supportingDocsInput"),
   additionalDocsInput: document.getElementById("additionalDocsInput"),
   processWorkspaceButton: document.getElementById("processWorkspaceButton"),
+  groqApiKeyInput: document.getElementById("groqApiKeyInput"),
+  saveGroqApiKeyButton: document.getElementById("saveGroqApiKeyButton"),
+  clearGroqApiKeyButton: document.getElementById("clearGroqApiKeyButton"),
+  groqApiKeyStatus: document.getElementById("groqApiKeyStatus"),
   appendDocsButton: document.getElementById("appendDocsButton"),
   urlIngestForm: document.getElementById("urlIngestForm"),
   urlInput: document.getElementById("urlInput"),
@@ -71,6 +77,8 @@ init();
 
 function init() {
   elements.processWorkspaceButton.addEventListener("click", parseUploadedWorkspace);
+  elements.saveGroqApiKeyButton?.addEventListener("click", saveGroqApiKey);
+  elements.clearGroqApiKeyButton?.addEventListener("click", clearGroqApiKey);
   elements.appendDocsButton.addEventListener("click", appendSupportingDocs);
   elements.urlIngestForm.addEventListener("submit", handleUrlIngest);
   elements.chatComposer.addEventListener("submit", handleChatSubmit);
@@ -91,6 +99,7 @@ function init() {
       elements.chatInput.focus();
     }),
   );
+  hydrateGroqKeyControls();
   render();
 }
 
@@ -184,11 +193,19 @@ async function handleChatSubmit(event) {
   render();
 
   try {
-    const suggestion = await postJson("/api/refine", {
-      row,
-      request: prompt,
-      supporting_docs: state.supportingDocs,
-    });
+    const headers = {};
+    if (state.groqApiKey) {
+      headers["X-Groq-API-Key"] = state.groqApiKey;
+    }
+    const suggestion = await postJson(
+      "/api/refine",
+      {
+        row,
+        request: prompt,
+        supporting_docs: state.supportingDocs,
+      },
+      { headers },
+    );
     state.currentSuggestion = suggestion;
     state.reviewTab = "decision";
     appendChat(
@@ -407,7 +424,7 @@ async function exportChartDocx() {
     toast("Load a workspace before exporting.", "error");
     return;
   }
-  await downloadFile("/api/export/chart-docx", { rows: state.rows }, "lumenci_refined_claim_chart.docx");
+  await downloadFile("/api/export/chart-docx", { rows: state.rows }, "claimcraft_refined_claim_chart.docx");
 }
 
 async function exportSummaryDocx() {
@@ -418,7 +435,7 @@ async function exportSummaryDocx() {
   await downloadFile(
     "/api/export/summary-docx",
     { version_history: state.versionHistory, chart_rows: state.rows },
-    "lumenci_version_summary.docx",
+    "claimcraft_version_summary.docx",
   );
 }
 
@@ -427,7 +444,7 @@ async function exportChartCsv() {
     toast("Load a workspace before exporting.", "error");
     return;
   }
-  await downloadFile("/api/export/chart-csv", { rows: state.rows }, "lumenci_refined_claim_chart.csv");
+  await downloadFile("/api/export/chart-csv", { rows: state.rows }, "claimcraft_refined_claim_chart.csv");
 }
 
 function hydrateWorkspace(payload) {
@@ -1517,10 +1534,65 @@ function formatTimestamp() {
   });
 }
 
-async function postJson(url, payload) {
+function loadGroqApiKey() {
+  try {
+    return window.localStorage.getItem(GROQ_API_KEY_STORAGE_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+
+function hydrateGroqKeyControls() {
+  if (!elements.groqApiKeyInput || !elements.groqApiKeyStatus) {
+    return;
+  }
+  elements.groqApiKeyInput.value = state.groqApiKey;
+  renderGroqKeyStatus();
+}
+
+function renderGroqKeyStatus() {
+  if (!elements.groqApiKeyStatus) {
+    return;
+  }
+  if (state.groqApiKey) {
+    const masked = `${state.groqApiKey.slice(0, 4)}...${state.groqApiKey.slice(-4)}`;
+    elements.groqApiKeyStatus.textContent = `Browser-saved Groq key active (${masked}). Live refinements will use your key for /api/refine requests.`;
+    return;
+  }
+  elements.groqApiKeyStatus.textContent =
+    "No browser-saved key detected. Refinements will use fallback mode unless the server has one configured.";
+}
+
+function saveGroqApiKey() {
+  const value = elements.groqApiKeyInput?.value.trim() || "";
+  state.groqApiKey = value;
+  try {
+    if (value) {
+      window.localStorage.setItem(GROQ_API_KEY_STORAGE_KEY, value);
+    } else {
+      window.localStorage.removeItem(GROQ_API_KEY_STORAGE_KEY);
+    }
+  } catch {}
+  renderGroqKeyStatus();
+  toast(value ? "Groq API key saved in this browser." : "Groq API key removed.", "success");
+}
+
+function clearGroqApiKey() {
+  state.groqApiKey = "";
+  if (elements.groqApiKeyInput) {
+    elements.groqApiKeyInput.value = "";
+  }
+  try {
+    window.localStorage.removeItem(GROQ_API_KEY_STORAGE_KEY);
+  } catch {}
+  renderGroqKeyStatus();
+  toast("Groq API key cleared from this browser.", "success");
+}
+
+async function postJson(url, payload, options = {}) {
   const response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
     body: JSON.stringify(payload),
   });
   return readJsonResponse(response);

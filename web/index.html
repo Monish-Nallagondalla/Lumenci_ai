@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lumenci Claim Chart Refinement Demo</title>
+    <title>ClaimCraft AI Claim Chart Workspace</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
@@ -13,8 +13,8 @@
 
     <div class="app-shell">
       <div class="announcement-bar animate-in">
-        <span>Announcement: Lumenci leadership recognized in IAM Strategy 300 Global Leaders 2026</span>
-        <a href="#">Read More</a>
+        <span>Workflow note: Upload a claim chart and support docs to generate grounded, row-level refinements.</span>
+        <a href="#workspaceIntake">Start Here</a>
       </div>
 
       <header class="hero panel animate-in">
@@ -22,7 +22,7 @@
           <div class="brand-ribbon">
             <div class="brand-lockup">
               <div class="brand-mark" aria-hidden="true"></div>
-              <span class="brand-name">LUMENCI</span>
+              <span class="brand-name">CLAIMCRAFT AI</span>
             </div>
             <span class="brand-tag">AI Claim Chart Refinement Demo</span>
           </div>
@@ -79,6 +79,33 @@
             </div>
           </div>
 
+        </div>
+
+        <div class="settings-bar">
+          <section class="settings-card surface-action">
+            <div>
+              <h3>Inference Key</h3>
+              <p>
+                Paste your own Groq API key to enable live model responses. If left blank, the app
+                stays usable with fallback logic. Your key is stored only in this browser.
+              </p>
+            </div>
+            <div class="settings-controls">
+              <input
+                id="groqApiKeyInput"
+                type="password"
+                placeholder="gsk_..."
+                autocomplete="off"
+              />
+              <div class="settings-actions">
+                <button id="saveGroqApiKeyButton" class="btn btn-secondary" type="button">Save key</button>
+                <button id="clearGroqApiKeyButton" class="btn btn-ghost" type="button">Clear</button>
+              </div>
+            </div>
+            <p id="groqApiKeyStatus" class="settings-status subtle-text">
+              No browser-saved key detected. Refinements will use fallback mode unless the server has one configured.
+            </p>
+          </section>
         </div>
 
         <div class="evidence-bar">

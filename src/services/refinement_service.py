@@ -13,11 +13,13 @@ class RefinementService:
         row: dict,
         request: str,
         supporting_docs: list[dict],
+        api_key: str | None = None,
     ) -> dict:
         return self.orchestrator.refine_row(
             row=row,
             request=request,
             supporting_docs=supporting_docs,
+            api_key=api_key,
         )
 
     def apply_suggestion(self, row: dict, suggestion: dict) -> dict:

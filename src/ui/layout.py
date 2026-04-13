@@ -5,7 +5,7 @@ import streamlit as st
 
 def configure_page() -> None:
     st.set_page_config(
-        page_title="Lumenci AI Claim Chart Refinement Demo",
+        page_title="ClaimCraft AI Claim Chart Workspace",
         page_icon=":page_facing_up:",
         layout="wide",
     )

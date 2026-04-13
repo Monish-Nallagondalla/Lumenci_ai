@@ -755,6 +755,44 @@ textarea {
   gap: 18px;
 }
 
+.settings-bar {
+  margin-top: 18px;
+}
+
+.settings-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.9fr);
+  gap: 18px;
+  padding: 20px;
+}
+
+.settings-controls {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.settings-controls input {
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text);
+  padding: 13px 14px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.settings-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.settings-status {
+  margin: 0;
+  grid-column: 1 / -1;
+}
+
 .upload-card {
   padding: 20px;
   min-height: 142px;
@@ -1578,6 +1616,7 @@ input[type="file"] {
   .kpi-layout,
   .export-grid,
   .upload-grid,
+  .settings-card,
   .evidence-bar,
   .spotlight-columns,
   .metric-ring-grid,

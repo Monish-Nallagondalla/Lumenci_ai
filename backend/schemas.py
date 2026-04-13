@@ -59,10 +59,10 @@ class VersionHistoryEntryModel(BaseModel):
 
 class ExportChartRequest(BaseModel):
     rows: List[ClaimChartRowModel]
-    title: str = "Lumenci Refined Claim Chart"
+    title: str = "ClaimCraft Refined Claim Chart"
 
 
 class ExportSummaryRequest(BaseModel):
     version_history: List[VersionHistoryEntryModel]
     chart_rows: List[ClaimChartRowModel]
-    title: str = "Lumenci Version Summary Report"
+    title: str = "ClaimCraft Version Summary Report"

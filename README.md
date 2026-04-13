@@ -1,150 +1,223 @@
-# Lumenci AI Claim Chart Refinement Demo
+# ClaimCraft AI Claim Chart Workspace
 
-This repository now ships with a polished custom web app instead of relying on Streamlit for the main demo experience. The new UI uses a FastAPI backend plus a custom single-page frontend so the workflow feels more like a purpose-built analyst tool while keeping the prototype lightweight and easy to run.
+Portfolio case study and vibe-coded prototype for AI-assisted patent claim chart refinement.
 
-## What the prototype does
+ClaimCraft AI is a human-in-the-loop workspace for improving patent claim charts with grounded evidence, tighter reasoning, explicit review, and export-ready outputs. It was built as a product-thinking exercise around a high-stakes workflow where AI suggestions should be inspectable, challengeable, and reversible.
 
-- Uploads a claim chart CSV and optional supporting documents.
-- Parses the chart into a structured three-column review workspace.
-- Flags weak rows using heuristic evidence/reasoning checks.
-- Lets the analyst select a row and request refinements through chat.
-- Retrieves relevant support snippets from uploaded documents.
-- Generates AI suggestions with proposed evidence, reasoning, confidence, source basis, evaluator scores, and before/after diff.
-- Requires explicit analyst approval before any chart row is updated.
-- Supports accept, reject, modify-through-chat, undo last accepted change, and version logging.
-- Exports the refined chart as Word or CSV and exports the version summary as Word.
+## Highlights
 
-## Tech stack
+- Three-column claim chart workspace for claim element, evidence, and reasoning
+- Row-level conversational refinement with citation-backed review
+- Accept, reject, modify, undo, and version history flows
+- URL ingestion and appended support docs when evidence is weak
+- DOCX and CSV exports for downstream review
+- Bring-your-own Groq API key support in the UI for live inference without sharing server credentials
+
+## Why This Project Exists
+
+Patent analysts refine claim charts that map patent claim elements to accused product features and supporting evidence. That workflow is repetitive, evidence-sensitive, and high risk if AI is allowed to behave like an unreviewed auto-write system.
+
+I built this prototype to explore a better interaction model:
+
+- upload a claim chart and support material
+- identify weak evidence and vague reasoning
+- request refinement through chat
+- review AI suggestions before anything is applied
+- recover safely when the model is wrong or evidence is insufficient
+- export a cleaner chart for downstream legal work
+
+## What I Built
+
+- A custom FastAPI + HTML/CSS/JavaScript workspace for claim-chart refinement
+- A three-column chart view for claim element, evidence, and reasoning
+- Row-level conversational refinement
+- Citation-aware suggestion review
+- Accept, reject, modify, and undo flows
+- Version history and export-ready summaries
+- URL ingestion and support-doc append flows when evidence is weak
+- A slim guided workflow dock for first-time orientation
+
+## Why This Is More Than a UI Demo
+
+This repo demonstrates both product manager and builder behavior.
+
+### Product manager signals
+
+- Reframed the task from "generate text" to "support a defensible legal workflow"
+- Treated trust, reviewability, and recoverability as core product requirements
+- Designed explicit handling for wrong evidence, undo, and no-evidence scenarios
+- Added structured review states instead of allowing silent AI overwrite
+- Considered how observability, evals, and failure modes would matter in a real product
+
+### Builder signals
+
+- Moved from a quick Streamlit prototype to a custom FastAPI + SPA architecture when the first stack stopped serving the workflow
+- Used Groq through `langchain-groq` for live refinement when configured
+- Kept a deterministic fallback path so the demo remains testable even without live inference
+- Built export endpoints, file parsing, row-level retrieval, scoring, and UI state management
+
+## Product Decisions I Am Proud Of
+
+### 1. Human-in-the-loop over auto-apply
+
+The assistant proposes updates, but the chart only changes after explicit review. In a legal-adjacent workflow, that is a product decision, not just a UI detail.
+
+### 2. Workflow around AI, not AI in isolation
+
+The actual product is not the model output. The product is the workflow around it: retrieval, review, citations, diffs, recovery, and exports.
+
+### 3. Designed for failure, not just the happy path
+
+I explicitly supported:
+
+- AI gives wrong evidence
+- user wants to undo a previous refinement
+- AI cannot find enough support and needs more docs or a URL
+
+## Demo Path
+
+Use the camera files for the cleanest walkthrough:
+
+- Claim chart: `data/demo_claim_chart_camera_realistic.csv`
+- Supporting doc: `data/demo_support_camera.txt`
+
+Suggested demo flow:
+
+1. Upload the claim chart and support doc
+2. Click `Parse and open workspace`
+3. Select a weak row
+4. Ask for stronger evidence or reasoning
+5. Review citations, diff, and scrutiny signals
+6. Accept or modify the suggestion
+7. Show undo and export
+
+## Public Demo Usage
+
+If you deploy this project publicly, visitors can use it in two ways:
+
+- `Fallback mode`: leave the inference key blank and the prototype still works with deterministic fallback logic
+- `Live Groq mode`: paste a Groq API key into the `Inference Key` field in the intake area and save it in the browser
+
+The key is stored only in local browser storage and sent only on refinement requests through the `X-Groq-API-Key` header. It is not committed to the repo and does not need to be hardcoded on the server for shared demos.
+
+## PM Artifact Pack
+
+I added a dedicated PM artifact pack here:
+
+- [`docs/PRODUCT_MANAGER_ARTIFACT_PACK.md`](docs/PRODUCT_MANAGER_ARTIFACT_PACK.md)
+
+That file packages the kinds of materials a PM would typically maintain around this product, including:
+
+- product brief
+- problem framing
+- users and jobs-to-be-done
+- PRD summary
+- scope and non-goals
+- risks and assumptions
+- success metrics
+- eval and observability thinking
+- launch and readiness checklist
+
+Other supporting project docs:
+
+- [`CURRENT_USER_FLOW.mmd`](CURRENT_USER_FLOW.mmd)
+- [`docs/PORTFOLIO_CASE_STUDY.md`](docs/PORTFOLIO_CASE_STUDY.md)
+
+## Tech Stack
 
 - Backend: FastAPI
 - Frontend: custom HTML/CSS/JavaScript SPA
-- Orchestration: lightweight modular agent/service architecture in Python
-- LLM provider: Groq through `langchain-groq`
-- State model: client-side session state in the browser plus stateless backend refinement/export endpoints
+- LLM provider: Groq via `langchain-groq`
+- Default model: `llama-3.3-70b-versatile`
+- State: browser session state with stateless backend refinement and export endpoints
 
-## Project structure
+## Architecture
+
+- `ParserAgent`: normalizes claim-chart input
+- `RetrievalAgent`: finds relevant evidence snippets from uploaded support docs
+- `ReasoningAgent`: generates stronger evidence and reasoning via Groq or fallback logic
+- `EvaluatorAgent`: scores evidence strength, specificity, and relevance
+- `Orchestrator`: coordinates the row-level refinement flow
+- `backend/main.py`: serves upload, refine, URL ingestion, and export endpoints
+- `web/`: renders the analyst-facing workflow
+
+## Project Structure
 
 ```text
-Lumenci/
-├── backend/
-│   ├── main.py
-│   └── schemas.py
-├── data/
-│   ├── sample_claim_chart.csv
-│   ├── sample_supporting_doc.txt
-│   ├── demo_claim_chart_camera.csv
-│   ├── demo_claim_chart_router.csv
-│   ├── demo_support_camera.txt
-│   ├── demo_support_router.txt
-│   └── demo_support_thermostat_extra.txt
-├── src/
-│   ├── agents/
-│   ├── llm/
-│   ├── services/
-│   └── utils/
-├── web/
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
-├── .env.example
-├── requirements.txt
-└── app.py
+ClaimCraftAI/
+|- backend/
+|- data/
+|- docs/
+|- src/
+|- web/
+|- CURRENT_USER_FLOW.mmd
+|- docs/PORTFOLIO_CASE_STUDY.md
+|- README.md
+`- requirements.txt
 ```
 
-`app.py` is the earlier Streamlit prototype and can be kept as a fallback, but the recommended demo surface is now the FastAPI web app.
+## Run Locally
 
-## Setup
-
-1. Create a Python virtual environment.
-2. Install dependencies:
+1. Create and activate a Python virtual environment
+2. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Create `.env` from `.env.example`:
+3. Create `.env` from `.env.example`
 
 ```bash
 copy .env.example .env
 ```
 
-4. Add your Groq credentials:
+4. Add Groq credentials
 
 ```env
 GROQ_API_KEY=your_key_here
 MODEL_NAME=llama-3.3-70b-versatile
 ```
 
-## Run the new web app
+You can also skip the `.env` key entirely and test the UI with fallback mode, or paste a Groq key into the browser input after launch.
+
+5. Start the app
 
 ```bash
 python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-Then open:
+6. Open:
 
 ```text
 http://localhost:8000
 ```
 
-## Recommended demo flow
+## What Is Real vs Prototype-Grade
 
-1. Open the app and upload your own CSV plus support files.
-2. Click `Parse and open workspace`.
-3. Review flagged rows in the chart.
-4. Select a claim element row.
-5. Use a quick action like `Strengthen evidence` or enter a custom prompt in chat.
-6. Review the AI suggestion card with source basis, confidence, evaluator scores, and before/after diff.
-7. Accept, reject, or modify via chat.
-8. If the suggestion needs more evidence, append more support docs or ingest a technical URL.
-9. Use `Undo last accepted change` if needed.
-10. Export the final claim chart `.docx` and the version summary `.docx`.
+### Real
 
-## What is real vs simplified
+- File upload and parsing
+- TXT/PDF/DOCX support-doc extraction
+- URL ingestion
+- Row-level refinement requests
+- Groq-backed generation when configured through `.env` or the browser key input
+- Review workflow with accept/reject/modify
+- Version history and export endpoints
 
-Real:
-- Upload and parsing flow
-- TXT/PDF/DOCX support doc extraction
-- URL ingestion for additional support text
-- Row-level retrieval by keyword/snippet matching
-- Groq-backed refinement when the API key is configured
-- Human approval workflow
-- Version history tracking
-- Word and CSV export endpoints
+### Prototype-grade
 
-Simplified:
-- Retrieval is lexical rather than vector or semantic search
-- Weak-row highlighting uses heuristics instead of a dedicated scoring model
-- Fallback refinement logic is deterministic if the Groq call fails or no key is configured
-- No persistent database, auth, or multi-user session storage
+- Retrieval is lexical, not vector or semantic search
+- Scoring is heuristic, not model-based evaluation
+- No persistent database or auth
+- No production observability or eval framework yet
 
-## Architecture overview
+## Why This Repo Matters
 
-- `ParserAgent`: parses and normalizes the uploaded claim chart.
-- `RetrievalAgent`: finds the most relevant uploaded support snippets.
-- `ReasoningAgent`: creates improved evidence/reasoning via Groq or fallback logic.
-- `EvaluatorAgent`: scores evidence strength, reasoning specificity, and relevance.
-- `VersioningAgent`: shapes structured version entries.
-- `Orchestrator`: coordinates row-specific refinement.
-- `backend/main.py`: exposes upload, refine, URL ingestion, and export endpoints.
-- `web/`: renders the custom analyst-facing interface.
+This repo is meant to read like one of my actual projects. It shows how I think when product strategy, workflow design, execution speed, and AI systems all meet in the same problem space.
 
-## Demo files
+If I were shipping this further, the next layer would be:
 
-Use the files in `data/` to test both upload sections:
-
-- Claim charts:
-  - `sample_claim_chart.csv`
-  - `demo_claim_chart_camera.csv`
-  - `demo_claim_chart_router.csv`
-- Supporting docs:
-  - `sample_supporting_doc.txt`
-  - `demo_support_camera.txt`
-  - `demo_support_router.txt`
-  - `demo_support_thermostat_extra.txt`
-
-## Notes
-
-- The app is built for assignment/demo quality: strong flow, clear UX, and modular code rather than production infrastructure.
-- If Groq is not configured, the UI still works and shows fallback suggestions so the demo can proceed end to end.
-- Uploaded CSVs only need a claim-element column. Existing evidence and reasoning columns are supported but not required.
+- stronger retrieval and evidence ranking
+- richer eval harnesses and observability
+- persistent workspaces and collaboration
+- legal-review-specific QA and audit trails
